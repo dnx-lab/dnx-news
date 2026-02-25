@@ -1,45 +1,56 @@
-<script>
-fetch("https://api.dify.ai/v1/workflows/run", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": "Bearer app-zTfTieMtNP3QLwjsbQ93Augj"
-  },
-  body: JSON.stringify({
-    inputs: {},
-    response_mode: "blocking",
-    user: "web-user"
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>디엔엑스 뉴스</title>
+</head>
+
+<body>
+  <h2>디엔엑스 뉴스</h2>
+
+  <div id="news">불러오는 중...</div>
+
+  <script>
+  fetch("https://api.dify.ai/v1/workflows/run", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer app-zTfTieMtNP3QLwjsbQ93Augj"
+    },
+    body: JSON.stringify({
+      inputs: {},
+      response_mode: "blocking",
+      user: "web-user"
+    })
   })
-})
-.then(r => r.json())
-.then(res => {
-  console.log(res);
+  .then(r => r.json())
+  .then(res => {
+    console.log(res);
 
-  // 🔥 가장 흔한 구조 대응
-  let data = res.data?.outputs;
+    let data = res.data?.outputs;
 
-  // outputs 안에 또 들어있는 경우 대비
-  if (typeof data === "string") {
-    try { data = JSON.parse(data); } catch(e) {}
-  }
+    if (typeof data === "string") {
+      try { data = JSON.parse(data); } catch(e) {}
+    }
 
-  const el = document.getElementById("news");
+    const el = document.getElementById("news");
 
-  if (!Array.isArray(data)) {
-    el.innerText = "데이터 형식이 올바르지 않습니다.";
-    return;
-  }
+    if (!Array.isArray(data)) {
+      el.innerText = "데이터 형식이 올바르지 않습니다.";
+      return;
+    }
 
-  el.innerHTML = data.map(n => `
-    <div class="item">
-      <a href="${n.link}" target="_blank">${n.title}</a>
-      <p>${n.summary}</p>
-    </div>
-  `).join("");
-})
-.catch(err => {
-  console.error(err);
-  document.getElementById("news").innerText = "뉴스를 불러오지 못했습니다.";
-});
-</script>
-
+    el.innerHTML = data.map(n => `
+      <div class="item">
+        <a href="${n.link}" target="_blank">${n.title}</a>
+        <p>${n.summary}</p>
+      </div>
+    `).join("");
+  })
+  .catch(err => {
+    console.error(err);
+    document.getElementById("news").innerText = "뉴스를 불러오지 못했습니다.";
+  });
+  </script>
+</body>
+</html>
