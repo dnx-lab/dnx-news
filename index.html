@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>DNX 뉴스</title>
+<style>
+body { font-family: sans-serif; padding: 20px; }
+.item { margin-bottom: 16px; }
+a { font-weight: bold; color: #1a73e8; text-decoration: none; }
+</style>
+</head>
+<body>
+<h2>디엔엑스 최신 뉴스</h2>
+<div id="news">불러오는 중...</div>
+
+<script>
+fetch("YOUR_DIFY_API_URL")
+  .then(r => r.json())
+  .then(data => {
+    const el = document.getElementById("news");
+    el.innerHTML = data.map(n => `
+      <div class="item">
+        <a href="${n.link}" target="_blank">${n.title}</a>
+        <p>${n.summary}</p>
+      </div>
+    `).join("");
+  })
+  .catch(() => {
+    document.getElementById("news").innerText = "뉴스를 불러오지 못했습니다.";
+  });
+</script>
+</body>
+</html>
