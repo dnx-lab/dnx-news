@@ -3,7 +3,7 @@ fetch("https://api.dify.ai/v1/workflows/run", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
-    "Authorization": "app-zTfTieMtNP3QLwjsbQ93Augj"
+    "Authorization": "Bearer app-zTfTieMtNP3QLwjsbQ93Augj"
   },
   body: JSON.stringify({
     inputs: {},
@@ -42,3 +42,4 @@ fetch("https://api.dify.ai/v1/workflows/run", {
   document.getElementById("news").innerText = "뉴스를 불러오지 못했습니다.";
 });
 </script>
+
