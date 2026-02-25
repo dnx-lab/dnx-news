@@ -27,20 +27,27 @@
   .then(res => {
     console.log(res);
 
-    let data = res.data?.outputs;
-
-    if (typeof data === "string") {
-      try { data = JSON.parse(data); } catch(e) {}
+    // outputs.summary가 문자열(JSON text)이므로 파싱
+    let news = [];
+    try {
+      const raw = res.data?.outputs?.summary;
+      if (raw) {
+        const parsed = JSON.parse(raw);   // 문자열 → 객체
+        news = parsed.news || [];
+      }
+    } catch(e) {
+      console.error("뉴스 파싱 실패", e);
     }
 
     const el = document.getElementById("news");
 
-    if (!Array.isArray(data)) {
-      el.innerText = "데이터 형식이 올바르지 않습니다.";
+    if (!Array.isArray(news) || news.length === 0) {
+      el.innerText = "뉴스를 불러오지 못했거나 데이터가 없습니다.";
       return;
     }
 
-    el.innerHTML = data.map(n => `
+    // 뉴스 화면에 뿌리기
+    el.innerHTML = news.map(n => `
       <div class="item">
         <a href="${n.link}" target="_blank">${n.title}</a>
         <p>${n.summary}</p>
